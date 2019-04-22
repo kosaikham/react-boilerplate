@@ -3,7 +3,6 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   // in cli => webpack -- --mode development
-  mode: "production",
   entry: "./src/index.js", // relative path
   output: {
     path: path.join(__dirname, "dist"), // need to be absolute path

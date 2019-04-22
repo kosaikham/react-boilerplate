@@ -53,4 +53,41 @@ plugins: [
 
 - Then create a html file with an `id#app` div in the `src` directory
 
-# Finish 10, start from 11
+- So far here, we need to run `npm run build` every time we make changes to the application. So, It's better if there is a watch man to our application and auto rebuild if something is changed in the application. So now, we make a new script in package.json like this.
+
+```
+"dev": "webpack --watch --mode development",
+```
+
+- Then run `npm run dev`
+- Now, separate our `webpack.config.js` into 3 files : `webpack.config.base.js`, `webpack.config.dev.js` and `webpack.config.prod.js`.
+- Then copy all lines from `webpack.config.js` into `base.js` file and remove `mode: "production"`.
+- And then, install `webpack-merge` in `dev-dependencies` and require it to `dev.js` and `prod.js`.
+
+```
+const merge = require("webpack-merge");
+const baseConfig = require("./webpack.config.base");
+
+module.exports = merge(baseConfig, {
+  mode: "development"
+});
+```
+
+- According to this code, you can get the point. Move on.
+- So far so good. Now our application is pretty straight forward, But we are just calling file system directly as opposed to use development server. So we need to install `webpack-dev-server` in dev-dependencies and modify the existing script by replacing `webpack` to `webpack-dev-server` like this.
+
+```
+"dev": "webpack-dev-server --open --config webpack.config.dev.js",
+```
+
+- The `--open` flag is used to open in browser automically when we run this script.
+- We can also customize the application port number in `webpack.config.dev.js` by adding `devServer` as follow:
+
+```
+mode: "development",
+  devServer: {
+    port: "9000"
+  }
+```
+
+## Finish 13, and next from 14
