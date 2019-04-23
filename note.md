@@ -90,4 +90,48 @@ mode: "development",
   }
 ```
 
-## Finish 13, and next from 14
+- we can debug our react application by inserting `debugger` keyword between our business logic. But when we actually debug it in our browser source area, the output code are not as we expected. It got transpiled. In this case, we want to look up our written code. so `webpack` also provide to look up actual written code by adding `devtoo: 'source-map'` in the `webpack.config.dev.js`.
+
+- Everything is working fine so far. But when we use state keyword in this react application, program doesn't know that `state`. Because this `state` keyword is not part of Js application. In order to solve this, we have to install `@babel/plugin-proposal-class-properties` plugin in dev-dependencies.Then Add this plugin in `webpack.config.base.js` as follows:
+
+```
+// module > rules > test
+options: {
+          presets: ["@babel/preset-env", "@babel/preset-react"],
+          plugins: ["@babel/plugin-proposal-class-properties"]
+        }
+```
+
+- so now, currently the application doesn't know `css` file and we can't import `css` file via `import './style.css` like this. So we need to install `css-loader` and `style-loader` in dev-dependencies and then create a new rules in `webpack.config.base.js` as below:
+
+```
+{
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+        exclude: /node_modules/
+      }
+```
+
+- in this case, we used `use` key instead of using `loader`, because we need to load multiple loaders. we can't use `loaders` in plural version coz it is deprecated.
+- Moving on! Adding the hot-reloading feature in our application is pretty great in development process. It also maintain application state. In order to add hot-reload feature, first we need to intall `react-hot-loader` in dependencies. And then add to the `plugins` section of `webpack.config.base.js` as follow:
+
+```
+plugins: [
+            "react-hot-loader/babel",
+            "@babel/plugin-proposal-class-properties"
+          ]
+```
+
+- And then we also need to import `name import` from `react-hot-loader` to our app component and wrap it like this.
+
+```
+import {hot} from 'react-hot-reload'
+...
+export default hot(module)(App)
+```
+
+- And then add a new script in `package.json`
+
+```
+"dev:hot": "webpack-dev-server --open --hot --config webpack.config.dev.js",
+```
